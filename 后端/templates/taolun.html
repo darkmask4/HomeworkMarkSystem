@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./taolun.css">
+</head>
+<body>
+    <div class="shortcut">
+        <div class="xueke">
+            <ul>
+                <li>
+                    作业互评系统
+                </li>
+            </ul>
+        </div>
+        <div class="wrapper">
+            <ul>
+                <li class="item"><a href="">
+                    作业内容
+                </a></li>
+                <li class="item"><a href="#">
+                    完成情况
+                </a></li>
+                <li class="item"><a href="">
+                    成绩分析
+                </a></li>
+                <li class="item"><a href="">
+                    作业讨论
+                </a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="zhuyao">
+        <div id="pinglun">
+            <ul>
+                <li v-for="(item,index) in pinglunList">
+                    <a :href="item.lianjie">
+                    {{index+1}}.{{ item.xuqiu }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div id="fabu">
+            <input type="text" id="fabukuang" v-model ="talkName">
+            <button id="fabuanniu" @click="tianjia()" class="add">发布问题</button>
+        </div>
+    </div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+
+    <script>
+       
+        const zhuyao = new Vue({
+            el:'#zhuyao',
+            data:{
+                talkName:'',
+                pinglunList:[
+                    {id:1,xuqiu:'这道题怎么解',lianjie:'https://v2.cn.vuejs.org/'}
+                ]
+            },
+            methods:{
+                tianjia(){
+                if (this.talkName.trim()===''){
+                    alert('作业不能为空')
+                    return
+                }
+                this.pinglunList.unshift({
+                    id: +new Date(),
+                    xuqiu:this.talkName,
+                    lianjie:'https://v2.cn.vuejs.org/'
+                })
+                this.talkName=''
+            },
+
+            }
+        })
+    </script>
+
+
+</script>
+</body>
+</html>

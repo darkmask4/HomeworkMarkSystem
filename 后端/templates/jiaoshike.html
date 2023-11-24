@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='jiaoshike.css')}}">
+</head>
+<body>
+    <input type="hidden" id="data" value="{{course_id}}"/>
+    <div id="ding" >{{ course }}</div>
+    <div id="homeworks">
+    <header class="header">
+        <h1 class="title">作业</h1>
+        <input v-model ="homeworkName" placeholder="请添加作业" class="new-todo" >
+        <button @click="tianjia()" class="add">添加作业</button>
+      </header>
+      <div id="zuoyeliebiao">
+      <ul class="todo-list">
+        <li class="todo" v-for ="(item,index) in todoList">
+          <div class="view">
+            <span class="index">[[index+1]].</span> 
+            <label><a :href="item.lianjie">[[ item.name ]]</a></label>
+            <button @click="shanchu(item.id)" class="destroy">删除</button>
+          </div>
+        </li>
+        
+      </ul>
+      </div>
+      <footer class="footer">
+        <span class="todo-count">合 计:<strong> [[todoList.length]] </strong></span>
+        <button @click="qingkong()" class="clear-completed">
+          清空作业
+        </button>
+      </footer>
+      </div>
+      <script src="{{url_for('static',filename='vue.js')}}"></script>
+      <script src="{{url_for('static',filename='jquery.3.6.min.js')}}"></script>
+      <script src="{{url_for('static',filename='axios.js')}}"></script>
+      <script>
+        var path_data=$("#data").val();
+        var homeworks = new Vue({
+            el:'#homeworks',
+            delimiters:["[[","]]"],
+            data :{
+            homeworkName:'',
+            todoList:JSON.parse(path_data),
+            count:'0'
+        },
+        mounted() {
+                // 在Vue实例加载后，使用fetch从Flask端点获取数据
+                fetch('/tc/homework-data/'+path_data)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.todoList = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+            },
+        methods:{
+            shanchu(id){
+              var userchoice1 = window.confirm('您是否要删除您的作业')
+              if(userchoice1){
+                this.todoList = this.todoList.filter(item => item.id !== id)
+
+                axios.post('/tc/delete1', {
+                  id:id
+                })
+                  .then(response => {
+                  console.log(response.data);
+                })
+                  .catch(error => {
+                  console.error(error);
+                });
+              }
+              else return
+            },
+
+            tianjia(){
+                if (this.homeworkName.trim()===''){
+                    alert('作业不能为空')
+                    return
+                }
+                
+                axios.get('/tc/submit1')
+                  .then(response => {
+                  console.log(response.data);
+                  this.count=response.data.count;
+                  this.todoList.unshift({
+                    id: +new Date(),
+                    name:this.homeworkName,
+                    lianjie:path_data+'/'+this.count
+                })
+                })
+                  .catch(error => {
+                  console.error(error);
+                });
+
+                // console.log(this.count);
+                // this.todoList.unshift({
+                //     id: +new Date(),
+                //     name:this.homeworkName,
+                //     lianjie:path_data+'/'+this.count
+                // })
+                
+                axios.post('/tc/submit1', {
+                  homeworkName: this.homeworkName,
+                  course_id:path_data
+                })
+                  .then(response => {
+                  console.log(response.data);
+                  this.homeworkName=''
+                })
+                  .catch(error => {
+                  console.error(error);
+                });
+
+                // this.homeworkName=''
+            },
+
+            qingkong(){
+              var userchoice = window.confirm('您是否要清空您的作业')
+              if(userchoice){
+                this.todoList = []
+
+                axios.post('/tc/delete2', {
+                  cid:path_data
+                })
+                  .then(response => {
+                  console.log(response.data);
+                })
+                  .catch(error => {
+                  console.error(error);
+                });
+              }
+              else return
+            }
+        }
+        })
+        
+      </script>
+
+</body>
+</html>

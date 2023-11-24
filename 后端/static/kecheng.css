@@ -1,0 +1,137 @@
+body {
+    position: relative;
+    font-family: Arial, sans-serif;
+    background-image: url(./背景1.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+#ding{
+    width: 400px;
+    height: 50px;
+    font-style: italic;
+    font-size: 50px;
+    margin-top: -20px;
+} 
+
+#homeworks {
+    margin-top: auto;
+    margin-left: 0;
+    width: 200px;
+    height: 600px;
+    background-color: #db1d1d;
+    color: white;
+}
+
+#homeworks ul {
+    list-style-type: none;
+}
+
+
+#homeworks a {
+    width: 160px;
+    margin-left: -40px;
+    padding-left: 20px;
+    text-decoration: none;
+    display: block;
+    padding: 20px;
+    border: 1px solid #400cec;
+    background-color: #ffffff;
+    color: #1008e6;
+    transition: all 0.3s;
+}
+
+
+
+#ding {
+    background-color: #1b0a49;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: -10px;
+}
+
+#writeHomework{
+    resize: none;
+    margin-left: 350px;
+    margin-top: -600px;
+
+}
+
+#wenbenkuang1{
+    resize: none;
+    margin-top: 20px;
+    width: 1000px;
+    height: 250px;
+}
+
+#wenbenkuang{
+    resize: none;
+    margin-top: 20px;
+    width: 1000px;
+    height: 250px;
+}
+
+#username{
+    position: relative;
+    margin-top: -60px;
+    width: 200px;
+    height: 130px;
+    
+}
+
+.box{
+    margin-bottom: 0px;
+    position: relative;
+}
+
+
+
+#tijiao{
+    margin-top: 20px;
+    margin-left: 800px;
+}
+
+#homeworks a:hover {
+    background-color: #7aa4ec;
+    color: white;
+    transform: scale(1.05);
+    padding-left: 20px;
+}
+
+#yonghu{
+    position: absolute;
+    width: 200px;
+    height: 50px;
+    z-index: 999;
+    bottom: 0;
+}
+
+#username a {
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border: 1px solid #4CAF50;
+    background-color: #ffffff;
+}
+
+#taolun{
+    width: 140px;
+    margin-left: 1300px;
+    margin-top: -740px;
+}
+
+#taolun a {
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border: 1px solid #4CAF50;
+    background-color: #ffffff;
+}
+
+
+
+

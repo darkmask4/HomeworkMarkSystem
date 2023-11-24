@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='denglu.css')}}">
+</head>
+<body>
+    <section>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </section>
+    <div class="title">
+        作业互评系统
+    </div>
+    <div class="box1">
+        <form method="post">    
+            <h1>登录</h1>
+            <br><br>
+            用户名:<input class="acc1" type="text" name="id" placeholder="请输入用户名">
+            <br><br>
+            &nbsp&nbsp&nbsp密码:<input class="acc2" type="password" name="password" placeholder="请输入密码">  
+            <br><br>
+            &nbsp&nbsp<button type="submit" class="submit">登录</button>
+            <button type="reset" class="reset">重置用户名和密码</button>
+            <br><br>
+        </form>    
+    </div>  
+    <div id="kapian">
+        <div class="beijing" >
+            <div class="card">
+                <div class="rolebg">
+                    <img src="{{url_for('static',filename='实验图片1.png')}}" alt="">
+                </div>
+                <div class="role">
+                    <img src="{{url_for('static',filename='实验图片.png')}}" alt="">
+                </div>
+                <div class="zuzhang">
+                    <h1>组长:</h1>
+                    <p>李晨旭</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- <script src="{{url_for('static',filename='xingkong.js')}}"></script> -->
+</html>

@@ -1,0 +1,124 @@
+.shortcut{
+    display: flex;
+    height: 58px;
+    background-color: #131111;
+    justify-content: center;
+}
+
+.shortcut .wrapper{
+    display: flex;
+    height: 58px;
+    width: 1200px;
+    justify-content:end
+}
+
+.shortcut ul{
+    align-items: center;
+    display: flex;
+    line-height: 58px;
+    list-style-type: none;
+    color: white;
+}
+
+.shortcut li a{
+    padding: 0 25px;
+    border-right: 1px solid #999;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+a:visited{
+    color: white;
+}
+
+.shortcut li:last-child a{
+    border-right: none;
+}
+
+.xueke{
+    font-style: italic;
+    font-size: 28px;
+    margin-top: -30px;
+}
+
+#subnav{
+    overflow: hidden;
+    height: 660px;
+    width: 200px;
+    background-color: rgb(79, 5, 164);
+}
+
+#subnav li {
+    list-style: none;
+    padding-left: 10px;
+    height: 80px;
+    line-height: 100px;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+    border-bottom: 1px solid #000;
+    transition: all 0.5s;
+}
+
+#subnav li a{
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+#neirong{
+    resize: none;
+    height: 550px;
+    width: 900px;
+}
+
+#biaozhundaan{
+    resize: none;
+    height: 550px;
+    width: 900px;
+}
+
+#zuoye{
+    height: 550px;
+    width: 900px;
+    margin-top: 0;
+    margin-left: 400px;
+    background-position: center;
+    z-index: -1;
+}
+
+
+#fabu{
+    margin-left: 800px;
+    margin-top: 20px;
+}
+
+#jiezhi{
+    margin-left: 1000px;
+}
+
+#username{
+    position: relative;
+    margin-top: -110px;
+    width: 200px;
+    height: 130px;    
+}
+
+#username a {
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border: 1px solid #4CAF50;
+    background-color: #ffffff;
+    color: #000;
+}
+
+#yonghu{
+    position: absolute;
+    width: 200px;
+    height: 50px;
+    z-index: 999;
+    bottom: 0;
+}

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>详情</title>
+    <script src="{{url_for('static',filename='jquery.3.6.min.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='xiangqing.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='jquery-ui.css')}}">
+    <script src="{{url_for('static',filename='jquery-ui.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='jquery.timepicker.min.css')}}">
+    <script src="{{url_for('static',filename='jquery.timepicker.min.js')}}"></script>
+</head>
+<body>
+    <input type="hidden" id="data" value="{{lid}}"/>
+    <input type="hidden" id="data1" value="{{yijing}}"/>
+    <div class="shortcut">
+        <div class="xueke">
+            <ul>
+                <li>
+                    作业互评系统
+                </li>
+            </ul>
+        </div>
+        <div class="wrapper">
+            <ul>
+                <li class="item"><a href="#">
+                    作业内容
+                </a></li>
+                <li class="item"><a href="{{lid}}/state">
+                    完成情况
+                </a></li>
+                <li class="item"><a href="{{lid}}/analysis">
+                    成绩分析
+                </a></li>
+                <li class="item"><a href="">
+                    作业讨论
+                </a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="zuoye">
+        <div >
+            <textarea  v-if="yijing === 3" id="biaozhundaan"  type="text" placeholder="标准答案">{{answer}}</textarea>
+            <textarea v-else id="neirong"  type="text" placeholder="Enter your text here">{{content}}</textarea>
+        </div>
+    </div>
+    <div id="fabu">
+        <div v-if="yijing === 1 "><button @click = "fasong()">发布</button></div>
+        <div v-else-if="yijing === 2">
+            <button @click = "shouhui()">召回</button>
+            <button @click = "huping()">互评</button>
+        </div>
+        <div v-else-if="yijing === 3">
+            <button @click = "fadaan()">发布标准答案</button>
+            <button @click = "hupingquxiao()">互评取消</button>
+        </div>
+    </div>
+    <div id="jiezhi">
+        截止时间：
+        <br>
+        <label for="datepicker">选择日期:</label>
+        <input type="text" id="datepicker">
+        <br>
+        <label for="timepicker">选择时刻:</label>
+        <input type="text" id="timepicker" name="timepicker">
+    </div>
+
+    <div id="username">
+        <div v-show = "flag" class="box"><a href=""> 信息中心</a></div>
+        <div v-show = "flag" class="box"><a href="/auth/logout"> 退出登录</a></div>
+        <button id="yonghu" @click = "showUser()">{{user.name}}</button>
+    </div>
+
+    <script src="{{url_for('static',filename='vue.js')}}"></script>
+    <script src="{{url_for('static',filename='axios.js')}}"></script>
+    <script>
+        const eventBus = new Vue();
+    </script>
+    <script>
+        var path_data=$("#data").val();
+        var path_data1=parseInt($("#data1").val(), 10)
+        const fabu = new Vue({
+            el:'#fabu',
+            data:{
+                yijing:path_data1
+            },
+            methods:{
+                fasong(){
+                    if($("#neirong").val()==='')
+                    {
+                        alert('作业内容不能为空')
+                        return
+                    }
+                    if($("#datepicker").val()==='')
+                    {
+                        alert('截至时间不能为空')
+                        return
+                    }
+                    axios.post('/tc/post1', {
+                        content:$("#neirong").val(),
+                        duedate:$("#datepicker").val()+' '+$("#timepicker").val(),
+                        lid:path_data
+                    })
+                    .then(response => {
+                    this.yijing = 2,
+                    eventBus.$emit('change-yijing', this.yijing);
+                    console.log(response.data);
+                    })
+                    .catch(error => {
+                    console.error(error);
+                    });
+                },
+                shouhui(){
+                    this.yijing = 1,
+                    eventBus.$emit('change-yijing', this.yijing);
+                    axios.post('/tc/callback1', {
+                        lid:path_data
+                    })
+                    .then(response => {
+                    console.log(response.data);
+                    })
+                    .catch(error => {
+                    console.error(error);
+                    });
+                },
+                huping(){
+                    axios.get('/tc/evaluate/'+path_data)
+                  .then(response => {
+                  console.log(response.data);
+                  if(response.data.message==='False')
+                  {
+                    alert('请在作业截至时间结束后发布互评任务')
+                    return
+                  }
+                  this.yijing = 3,
+                  eventBus.$emit('change-yijing', this.yijing);
+                })
+                  .catch(error => {
+                  console.error(error);
+                });
+                },
+                hupingquxiao(){
+                    axios.post('/tc/callback2', {
+                        lid:path_data
+                    })
+                    .then(response => {
+                    console.log(response.data);
+                    })
+                    .catch(error => {
+                    console.error(error);
+                    });
+                    this.yijing = 2,
+                    eventBus.$emit('change-yijing', this.yijing);
+                },
+                fadaan(){
+                    if($("#biaozhundaan").val()==='')
+                    {
+                        alert('参考答案不能为空')
+                        return
+                    }
+                    if($("#datepicker").val()==='')
+                    {
+                        alert('截至时间不能为空')
+                        return
+                    }
+                    axios.post('/tc/evaluate/'+path_data, {
+                        answer:$("#biaozhundaan").val(),
+                        duedate:$("#datepicker").val()+' '+$("#timepicker").val()
+                    })
+                    .then(response => {
+                    console.log(response.data);
+                    })
+                    .catch(error => {
+                    console.error(error);
+                    });
+                }
+            }
+
+        })
+
+        const zuoye = new Vue({
+            el:'#zuoye',
+            delimiters:["[[","]]"],
+            data:{
+                yijing:path_data1
+            },
+            mounted() {
+                eventBus.$on('change-yijing', (value) => {
+                    this.yijing = value;
+                });
+            }
+        })
+
+        const username = new Vue({
+            el:'#username',
+            data:{
+                flag:false,
+            },
+            methods:{
+                showUser(){
+                    this.flag = !this.flag
+                }
+            }
+        })
+    </script>
+
+    <script>
+        $(function() {
+        // 初始化DatePicker
+        $("#datepicker").datepicker({
+            dateFormat:"yy-mm-dd",
+            minDate:0
+        }
+        );
+        $("#timepicker").timepicker({ 
+            'timeFormat': 'H:i:s',
+        step:0.5
+        }); // 设置时刻格式
+        });
+    </script>
+
+</body>
+</html>

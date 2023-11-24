@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作业批改</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='pigai.css')}}">
+</head>
+<body>
+    <input type="hidden" id="cid" value="{{cid}}"/>
+    <input type="hidden" id="lid" value="{{lid}}"/>
+    <input type="hidden" id="data" value="{{max}}"/>
+    <input type="hidden" id="data1" value="{{answer1}}"/>
+    <input type="hidden" id="data2" value="{{answer2}}"/>
+    <input type="hidden" id="data3" value="{{answer3}}"/>
+    <input type="hidden" id="data4" value="{{answer4}}"/>
+    <input type="hidden" id="data5" value="{{answer5}}"/>
+    <input type="hidden" id="data6" value="{{answer6}}"/>
+    <input type="hidden" id="grade1" value=""/>
+    <input type="hidden" id="grade2" value=""/>
+    <input type="hidden" id="grade3" value=""/>
+    <input type="hidden" id="grade4" value=""/>
+    <input type="hidden" id="grade5" value=""/>
+    <input type="hidden" id="grade6" value=""/>
+    <input type="hidden" id="sno1" value="{{sno1}}"/>
+    <input type="hidden" id="sno2" value="{{sno2}}"/>
+    <input type="hidden" id="sno3" value="{{sno3}}"/>
+    <input type="hidden" id="sno4" value="{{sno4}}"/>
+    <input type="hidden" id="sno5" value="{{sno5}}"/>
+    <input type="hidden" id="sno6" value="{{sno6}}"/>
+    <div id="ding" >作业互评系统</div>
+    <div id="chakan">    
+        <div id="biaozhundaan">
+            参考答案:
+            <br>
+            <textarea id="daan1" readonly placeholder="readonly text">{{answer}}</textarea>
+        </div>
+        <div id="tigongdaan">
+            学生答案:
+            <br>
+            <textarea id="daan" readonly placeholder="readonly text" >{{answer1}}</textarea>
+        </div>
+    </div>
+    <div id="chengji">
+        <input type="number" id="grade" min="0" max="100" required>
+    </div>
+    <div id="fenshu">
+        <button v-if="shuliang === max" @click="pigaiwancheng()">批改完成</button>
+        <div v-else>
+            <button @click="zengliang()">下一个</button>
+            <button @click="jianliang()">上一个</button>
+        </div>
+    </div>
+    <div id="fanhui">
+        <a href="/sc/student/{{cid}}">回到作业</a>
+    </div>
+    <script src="{{url_for('static',filename='axios.js')}}"></script>
+    <script src="{{url_for('static',filename='jquery.3.6.min.js')}}"></script>
+    <script src="{{url_for('static',filename='vue.js')}}"></script>
+    <script>
+        const fenshu = new Vue({
+            el:'#fenshu',
+            data:{
+                shuliang:0,
+                max:parseInt($("#data").val(), 10)-1
+            },
+            methods:{
+                zengliang(){
+                    this.shuliang=this.shuliang+1
+                    if(this.shuliang===1){
+                    $("#grade1").val($("#grade").val());
+                    $("#grade").val($("#grade2").val());
+                    $("#daan").val($("#data2").val());
+                    }
+                    if(this.shuliang===2){
+                    $("#grade2").val($("#grade").val());
+                    $("#grade").val($("#grade3").val());
+                    $("#daan").val($("#data3").val());
+                    }
+                    if(this.shuliang===3){
+                    $("#grade3").val($("#grade").val());
+                    $("#grade").val($("#grade4").val());
+                    $("#daan").val($("#data4").val());
+                    }
+                    if(this.shuliang===4){
+                    $("#grade4").val($("#grade").val());
+                    $("#grade").val($("#grade5").val());
+                    $("#daan").val($("#data5").val());
+                    }
+                    if(this.shuliang===5){
+                    $("#grade5").val($("#grade").val());
+                    $("#grade").val($("#grade6").val());
+                    $("#daan").val($("#data6").val());
+                    }
+                },
+                jianliang(){
+                    if(this.shuliang!==0){
+                    this.shuliang=this.shuliang-1
+                    if(this.shuliang===0){
+                    $("#grade2").val($("#grade").val());
+                    $("#grade").val($("#grade1").val());
+                    $("#daan").val($("#data1").val());
+                    }
+                    if(this.shuliang===1){
+                    $("#grade3").val($("#grade").val());
+                    $("#grade").val($("#grade2").val());
+                    $("#daan").val($("#data2").val());
+                    }
+                    if(this.shuliang===2){
+                    $("#grade4").val($("#grade").val());
+                    $("#grade").val($("#grade3").val());
+                    $("#daan").val($("#data3").val());
+                    }
+                    if(this.shuliang===3){
+                    $("#grade5").val($("#grade").val());
+                    $("#grade").val($("#grade4").val());
+                    $("#daan").val($("#data4").val());
+                    }
+                    if(this.shuliang===4){
+                    $("#grade6").val($("#grade").val());
+                    $("#grade").val($("#grade5").val());
+                    $("#daan").val($("#data5").val());
+                    }
+                }},
+                pigaiwancheng(){
+                    if(this.shuliang===0){
+                    $("#grade1").val($("#grade").val());
+                    }
+                    if(this.shuliang===1){
+                    $("#grade2").val($("#grade").val());
+                    }
+                    if(this.shuliang===2){
+                    $("#grade3").val($("#grade").val());
+                    }
+                    if(this.shuliang===3){
+                    $("#grade4").val($("#grade").val());
+                    }
+                    if(this.shuliang===4){
+                    $("#grade5").val($("#grade").val());
+                    }
+                    if(this.shuliang===5){
+                    $("#grade6").val($("#grade").val());
+                    }
+                    axios.post('/sc/post2', {
+                        grade1:$("#grade1").val(),
+                        grade2:$("#grade2").val(),
+                        grade3:$("#grade3").val(),
+                        grade4:$("#grade4").val(),
+                        grade5:$("#grade5").val(),
+                        grade6:$("#grade6").val(),
+                        sno1:$("#sno1").val(),
+                        sno2:$("#sno2").val(),
+                        sno3:$("#sno3").val(),
+                        sno4:$("#sno4").val(),
+                        sno5:$("#sno5").val(),
+                        sno6:$("#sno6").val(),
+                        lid:$("#lid").val()
+                    })
+                    .then(response => {
+                    console.log(response.data);
+                    window.location.href = '/sc/student/'+$("#cid").val();
+                    })
+                    .catch(error => {
+                    console.error(error);
+                    });
+                }
+            }
+        })
+    </script>
+
+</body>
+</html>

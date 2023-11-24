@@ -1,0 +1,62 @@
+body {
+    position: relative;
+    font-family: Arial, sans-serif;
+    background-image: url(./背景1.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+#chakan{
+    display: flex;
+    flex-direction: row;
+    margin-top: 60px;
+    margin-left: 50px;
+}
+
+#daan{
+    margin-left: 20px;
+    resize: none;
+    width: 400px;
+    height: 550px;
+}
+#daan1{
+    margin-left: 20px;
+    resize: none;
+    width: 400px;
+    height: 550px;
+}
+
+#ding{
+    position: fixed;
+    width: 400px;
+    height: 50px;
+    font-style: italic;
+    font-size: 50px;
+    margin-top: -60px;
+} 
+
+#chengji{
+    margin-left: 1200px;
+    margin-top: -400px;
+}
+
+#fenshu{
+    margin-left: 1200px;
+    margin-top: 10px;
+}
+
+#fanhui{
+    width: 100px;
+    margin-left: 1300px;
+    margin-top: -250px;
+}
+
+#fanhui a {
+    text-decoration: none;
+    display: block;
+    color: #000;
+}
+

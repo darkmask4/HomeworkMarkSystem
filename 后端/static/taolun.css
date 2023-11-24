@@ -1,0 +1,90 @@
+.shortcut{
+    display: flex;
+    height: 58px;
+    background-color: #131111;
+    justify-content: center;
+}
+
+.shortcut .wrapper{
+    display: flex;
+    height: 58px;
+    width: 1200px;
+    justify-content:end
+}
+
+.shortcut ul{
+    align-items: center;
+    display: flex;
+    line-height: 58px;
+    list-style-type: none;
+    color: white;
+}
+
+.shortcut li a{
+    padding: 0 25px;
+    border-right: 1px solid #999;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+a:visited{
+    color: white;
+}
+
+.shortcut li:last-child a{
+    border-right: none;
+}
+
+.xueke{
+    font-style: italic;
+    font-size: 28px;
+    margin-top: -30px;
+}
+
+
+li {
+    list-style: none;
+}
+
+#pinglun{
+    height: 500px;
+    width: 900px;
+    background-color: #e30f0f;
+}
+#zhuyao{
+    height: 600px;
+    width: 900px;
+    margin-left: 350px;
+    margin-top: -0;
+}
+
+#pinglun a {
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border: 1px solid #0d30dd;
+    background-color: #ffffff;
+    color: #7606e6;
+    transition: all 0.3s;
+}
+
+#pinglun ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#fabu{
+    margin-top: 20px;
+}
+
+#fabukuang{
+    width: 800px;
+}
+
+#fabuanniu{
+    margin-left: 18px;
+}
+
+
+
+

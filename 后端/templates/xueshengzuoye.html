@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='xueshengzuoye.css')}}">
+    <title>作业详情</title>
+</head>
+<body>
+    <input type="hidden" id="data" value="{{lid}}"/>
+    <input type="hidden" id="data1" value="{{sid}}"/>
+    <div id="qingkuang">
+        <table>
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>状态</th>
+                    <th>成绩</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>{{sid}}</td>
+                    <td>{{name}}</td>
+                    <td>{{state}}</td>
+                    <td>{{grade}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <textarea id="zuoyeneirong" readonly >{{content}}</textarea>
+    <div id="pingfen">
+        成绩: <input type="number" id="grade">
+        <button @click = "tijiao()">提交</button>
+    </div>
+    <div id="fanhui">
+        <a href="/tc/teacher/{{course_id}}/{{lid}}/state">回到作业</a>
+    </div>
+
+    
+    <script src="{{url_for('static',filename='jquery.3.6.min.js')}}"></script>
+    <script src="{{url_for('static',filename='axios.js')}}"></script>
+    <script src="{{url_for('static',filename='vue.js')}}"></script>
+    <script>
+       
+        var qingkuang = new Vue({
+            el:'#qingkuang',
+            data:{
+                studentList:[
+                    {no:1,sno:'1',name:'李',status:'已完成',grade:'0'},
+                ]
+            }
+        })
+        var pingfen=new Vue({
+            el:'#pingfen',
+            methods:{
+                tijiao()
+                {
+                    axios.post('/tc/grade', {
+                        grade:$("#grade").val(),
+                        lid:$("#data").val(),
+                        sid:$("#data1").val()
+                    })
+                    .then(response => {
+                    console.log(response.data);
+
+                    })
+                    .catch(error => {
+                    console.error(error);
+                    });
+                }
+            }
+        }
+        )
+    </script>
+</body>
+</html>

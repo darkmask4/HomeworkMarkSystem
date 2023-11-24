@@ -1,0 +1,81 @@
+body {
+    position: relative;
+    font-family: Arial, sans-serif;
+    background-image: url(./背景1.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+#ding {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    font-size: 50px;
+}
+
+#zuoyeliebiao{
+    font-style: italic;
+    font-size: large;
+}
+
+#zuoyeliebiao ul{
+    list-style-type: none;
+}
+
+#zuoyeliebiao a{
+    text-decoration: none;
+    color: black;
+}
+
+.new-todo{
+    width: 500px;
+}
+
+#homeworks{
+    margin-left: 250px;
+}
+.view{
+    display: flex;
+    width: 1000px;
+    text-align: center;
+}
+
+.view a {
+    text-decoration: none;
+    width: 900px;
+    display: block;
+    padding: 10px;
+    border: 1px solid #0c25e6;
+    background-color: #ffffff;
+}
+
+.new-todo{
+    height: 30px;
+    width: 920px;
+    margin-left: 55px;
+}
+
+.title{
+    width: 250px;
+    border: 1px solid white;
+    text-align: center;
+    background-color: rgb(249, 242, 242);
+    margin-left: 370px;
+}
+
+.footer{
+    position: relative;
+    margin-left: 50px;
+    width: 1000px;
+}
+
+.clear-completed{
+    position: absolute;
+    margin-left: 875px;
+}
+
+

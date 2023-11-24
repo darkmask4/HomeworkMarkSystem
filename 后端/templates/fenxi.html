@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='fenxi.css')}}">
+    <script src="{{url_for('static',filename='echarts.min.js')}}"></script>
+
+</head>
+<body>
+    <input type="hidden" id="data" value="{{lid}}"/>
+    <div></div>
+    <div class="shortcut">
+        <div class="xueke">
+            <ul>
+                <li>
+                    作业互评系统
+                </li>
+            </ul>
+        </div>
+        <div class="wrapper">
+            <ul>
+                <li class="item"><a href="/tc/teacher/{{course_id}}/{{lid}}">
+                    作业内容
+                </a></li>
+                <li class="item"><a href="/tc/teacher/{{course_id}}/{{lid}}/state">
+                    完成情况
+                </a></li>
+                <li class="item"><a href="#">
+                    成绩分析
+                </a></li>
+                <li class="item"><a href="">
+                    作业讨论
+                </a></li>
+            </ul>
+        </div>
+    </div>
+     <div id="subnav">
+        <div id="content">
+            
+        </div>
+    </div>
+    <div id="username">
+        <div v-show = "flag" class="box"><a href=""> 信息中心</a></div>
+        <div v-show = "flag" class="box"><a href="/auth/logout"> 退出登录</a></div>
+        <button id="yonghu" @click = "showUser()">{{user.name}}</button>
+    </div> 
+
+    <div class="echarts-box" id="main">
+        111
+    </div>
+    <script src="{{url_for('static',filename='vue.js')}}"></script>
+    <script src="{{url_for('static',filename='jquery.3.6.min.js')}}"></script>
+    <script src="{{url_for('static',filename='axios.js')}}"></script>
+    <script>
+        const subnav = new Vue({
+            el:'#subnav',
+            data:{
+                
+            }
+        })
+        const main = new Vue({
+            el:'#main',
+            mounted(){
+                fetch('/tc/grade-data/'+$("#data").val())
+                    .then(response => response.json())
+                    .then(data => {
+                        let myChart = echarts.init(document.querySelector('#main'))
+                myChart.setOption(
+                    {
+                        title: {
+                            text: '作业成绩分析',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left'
+                        },
+                        series: [
+                            {
+                            name: '成绩人数',
+                            type: 'pie',
+                            radius: '70%',
+                            data: data,
+                            emphasis: {
+                                itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                            }
+                        ]
+                        }
+                                        )
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+                                    }
+                    })
+
+        const username = new Vue({
+            el:'#username',
+            data:{
+                flag:false,
+            },
+            methods:{
+                showUser(){
+                    this.flag = !this.flag
+                }
+            }
+        })
+    </script>
+
+
+
+    
+</body>
+</html>

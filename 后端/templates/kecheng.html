@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>啦啦啦</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='kecheng.css')}}">
+</head>
+<body>
+    <input type="hidden" id="data" value=""/>
+    <input type="hidden" id="data1" value=""/>
+    <div id="ding" >作业互评系统</div>
+    <div id="homeworks">
+        <ul>
+            {% for item in items %}
+            <li>
+              <a href="#" onclick="changeTextBox('{{item.value}}')">{{ item.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="writeHomework">
+        <textarea id="wenbenkuang1" type="text" placeholder="zuoye1" readonly placeholder="Read-only text"></textarea>
+        <textarea id="wenbenkuang" type="text" placeholder="Enter your text here"></textarea>
+    </div>
+    <div id="tijiao">
+        <div v-if="yijing ===1 "><button @click = "tijiao1()">提交作业</button></div>
+        <div v-else><button @click = "tijiao1()">修改作业</button> <button @click = "pigai()">批改作业</button></div>
+
+    </div>
+    <div id="username">
+        <div v-show = "flag" class="box"><a href=""> 信息中心</a></div>
+        <div v-show = "flag" class="box"><a href="/auth/logout"> 退出登录</a></div>
+        <button id="yonghu" @click = "showUser()">{{user.name}}</button>
+    </div>
+    <div id="taolun">
+        <a href="/sc/discuse">点击进入讨论区</a>
+    </div>
+    <script src="{{url_for('static',filename='jquery.3.6.min.js')}}"></script>
+    <script src="{{url_for('static',filename='axios.js')}}"></script>
+    <script src="{{url_for('static',filename='vue.js')}}"></script>
+    <script>
+        const username = new Vue({
+            el:'#username',
+            data:{
+                flag:false,
+            },
+            methods:{
+                showUser(){
+                    this.flag = !this.flag
+                }
+            }
+        })
+        var tijiao = new Vue({
+            el:'#tijiao',
+            data:{
+                yijing:1,
+            },
+            methods:{
+                tijiao1(){
+                    if($("#wenbenkuang").val()==='')
+                    {
+                        alert('提交作业不能为空')
+                        return
+                    }
+                    axios.get('/sc/judge/'+$("#data1").val())
+                  .then(response => {
+                  console.log(response.data);
+                  if(response.data.message==='False')
+                  {
+                    alert('作业已截至')
+                    return
+                  }
+                  axios.post('/sc/post', {
+                        content:$("#wenbenkuang").val(),
+                        lid:$("#data1").val()
+                    })
+                    .then(response => {
+                        this.yijing=2
+                    })
+                    .catch(error => {
+                    console.error(error);
+                    });
+                })
+                  .catch(error => {
+                  console.error(error);
+                });
+                },
+                pigai(){
+                    axios.get('/sc/judge1/'+$("#data1").val())
+                  .then(response => {
+                  console.log(response.data);
+                  if(response.data.message==='False')
+                  {
+                    alert('不符合互评标准')
+                    return
+                  }
+                  window.location.href = '/sc/pigai/'+$("#data1").val();
+                })
+                  .catch(error => {
+                  console.error(error);
+                });
+                }
+            }
+        })
+    </script>
+
+    <script src="{{url_for('static',filename='jquery.3.6.min.js')}}"></script>
+    <script>
+        function changeTextBox(newValue) {
+            // 发送 AJAX 请求到 Flask 后端
+            $.ajax({
+                url: "/sc/update1/" + newValue,  // 包含参数的 URL
+                type: "GET",
+                success: function(response) {
+                    // 成功接收到响应后，更新文本框的内容
+                    $("#wenbenkuang1").val(response.new_value);
+                    $("#wenbenkuang").val(response.newvalue);
+                    $("#data").val(response.yijing);
+                    tijiao.yijing = parseInt($("#data").val(), 10);
+                    $("#data1").val(newValue);
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
