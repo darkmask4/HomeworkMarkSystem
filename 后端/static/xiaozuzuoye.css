@@ -1,35 +1,24 @@
+/*
 *{
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
-}
+}*/
 
 body{
+    margin: 0;
+    padding: 0;
     background-color: black;
     overflow: hidden;
+    user-select: none;
 }
-
-.box1{
-    width: 300px;
-    height: 300px;
-    margin-top: 200px;
-    margin-left: 200px;
-    padding-top: 5px;
-    align-items: center;
-    background-color: rgb(241, 232, 232,0.9);
-    border-radius: 15px;
-    color: rgb(1, 14, 27);
-}
-
+/*
 .title{
     width: 1000px;
     height: 20px;
     color: white;
     font-size: 100px;
-    margin-left: 450px;
+    margin-left: 550px;
 
-}
-
+}*/
 
 section{
     position: absolute;
@@ -164,6 +153,26 @@ span:nth-child(10){
     animation-duration: 2.25s;
 }
 
+#kapian{
+    margin-left: 200px;
+    margin-top: 100px;
+}
+
+#kapian1{
+    margin-left: 910px;
+    margin-top: -250px;
+}
+#kapian2{
+    margin-left: 200px;
+    margin-top: 100px;
+}
+#kapian3{
+    margin-left: 910px;
+    margin-top: -250px;
+}
+
+
+
 .card{
     width: 440px;
     height: 250px;
@@ -188,7 +197,7 @@ span:nth-child(10){
 
 .role{
     width: 400px;
-    height: 230px;
+    height: 290px;
     position: absolute;
     bottom: 0px;
     transform-origin: bottom;
@@ -202,10 +211,10 @@ span:nth-child(10){
 
 .zuzhang{
     width: 440px;
-    padding: 10px;
+    padding: 5px;
     color: white;
     position: absolute;
-    bottom: -50px;
+    bottom: -5px;
     opacity: 0;
     transition: 2s;
 }
@@ -231,11 +240,6 @@ span:nth-child(10){
 .card:hover .zuzhang {
     opacity: 1;
     transform: translateY(120px);
-}
-
-#kapian{
-    margin-top: -300px;
-    margin-left: 1000px;
 }
 
 a{

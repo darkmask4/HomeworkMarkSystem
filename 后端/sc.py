@@ -1,8 +1,10 @@
-from flask import Blueprint,render_template,request,session,url_for,redirect,jsonify
+from flask import Blueprint,render_template,request,session,url_for,redirect,jsonify,send_from_directory,flash
 from models import UserModel,CourseModel,UCModel,LHomeworkModel,SHomeworkModel
 from sqlalchemy import or_
 from exts import db
 from datetime import datetime
+from werkzeug.utils import secure_filename
+import os
 
 bp=Blueprint("sc",__name__,url_prefix="/sc")
 
@@ -58,10 +60,15 @@ def update1(lid):
     shomework=SHomeworkModel.query.filter_by(sid=user_id,lid=lid).first()
     new_value=contents.content
     newvalue=shomework.answer
+    if shomework.state=='待互评' or shomework.state=='已互评' or shomework.state=='互评过期':
+        duedate=contents.duedate1
+    else:
+        duedate=contents.duedate
+    grade=shomework.grade
     yijing=1
-    if newvalue:
+    if newvalue or shomework.filename:
         yijing=2
-    return jsonify({'new_value':new_value,'newvalue':newvalue,'yijing':yijing})
+    return jsonify({'new_value':new_value,'newvalue':newvalue,'yijing':yijing,'duedate':duedate,'grade':grade})
     
 @bp.route('/discuse',methods=['GET','POST'])
 def discuss():
@@ -203,64 +210,53 @@ def post2():
         grade6=data.get('grade6')
         # a=1
         shomework=SHomeworkModel.query.filter_by(lid=lid,sid=sno1).first()
-        if shomework.grade:
-            shomework.grade=(int(grade1)+shomework.grade)/2
-        else:
-            shomework.grade=grade1
+        if not shomework.grade1:
+            if shomework.grade:
+                shomework.grade2=shomework.grade2+1
+                shomework.grade=shomework.grade*(shomework.grade2-1)/shomework.grade2+int(grade1)/shomework.grade2
+            else:
+                shomework.grade=grade1
+                shomework.grade2=1
         shomework=SHomeworkModel.query.filter_by(lid=lid,sid=sno2).first()
-        if shomework.grade:
-            shomework.grade=(int(grade2)+shomework.grade)/2
-        else:
-            shomework.grade=grade2
+        if not shomework.grade1:
+            if shomework.grade:
+                shomework.grade2=shomework.grade2+1
+                shomework.grade=shomework.grade*(shomework.grade2-1)/shomework.grade2+int(grade2)/shomework.grade2
+            else:
+                shomework.grade=grade2
+                shomework.grade2=1
         shomework=SHomeworkModel.query.filter_by(lid=lid,sid=sno3).first()
-        if shomework.grade:
-            shomework.grade=(int(grade3)+shomework.grade)/2
-        else:
-            shomework.grade=grade3
+        if not shomework.grade1:
+            if shomework.grade:
+                shomework.grade2=shomework.grade2+1
+                shomework.grade=shomework.grade*(shomework.grade2-1)/shomework.grade2+int(grade3)/shomework.grade2
+            else:
+                shomework.grade=grade3
+                shomework.grade2=1
         shomework=SHomeworkModel.query.filter_by(lid=lid,sid=sno4).first()
-        if shomework.grade:
-            shomework.grade=(int(grade4)+shomework.grade)/2
-        else:
-            shomework.grade=grade4
+        if not shomework.grade1:
+            if shomework.grade:
+                shomework.grade2=shomework.grade2+1
+                shomework.grade=shomework.grade*(shomework.grade2-1)/shomework.grade2+int(grade4)/shomework.grade2
+            else:
+                shomework.grade=grade4
+                shomework.grade2=1
         shomework=SHomeworkModel.query.filter_by(lid=lid,sid=sno5).first()
-        if shomework.grade:
-            shomework.grade=(int(grade5)+shomework.grade)/2
-        else:
-            shomework.grade=grade5
+        if not shomework.grade1:
+            if shomework.grade:
+                shomework.grade2=shomework.grade2+1
+                shomework.grade=shomework.grade*(shomework.grade2-1)/shomework.grade2+int(grade5)/shomework.grade2
+            else:
+                shomework.grade=grade5
+                shomework.grade2=1
         shomework=SHomeworkModel.query.filter_by(lid=lid,sid=sno6).first()
-        if shomework.grade:
-            shomework.grade=(int(grade6)+shomework.grade)/2
-        else:
-            shomework.grade=grade6
-        # shomeworks=SHomeworkModel.query.filter(SHomeworkModel.lid == lid,or_(SHomeworkModel.sid == sno1, SHomeworkModel.sid == sno2,SHomeworkModel.sid == sno3,SHomeworkModel.sid == sno4,SHomeworkModel.sid == sno5,SHomeworkModel.sid == sno6)).all()
-        # for shomework in shomeworks:
-        #     if shomework.grade:
-        #         if a==1:
-        #             shomework.grade=(int(grade1)+shomework.grade)/2
-        #         if a==2:
-        #             shomework.grade=(int(grade2)+shomework.grade)/2
-        #         if a==3:
-        #             shomework.grade=(int(grade3)+shomework.grade)/2
-        #         if a==4:
-        #             shomework.grade=(int(grade4)+shomework.grade)/2
-        #         if a==5:
-        #             shomework.grade=(int(grade5)+shomework.grade)/2
-        #         if a==6:
-        #             shomework.grade=(int(grade6)+shomework.grade)/2
-        #     else:
-        #         if a==1:
-        #             shomework.grade=grade1
-        #         if a==2:
-        #             shomework.grade=grade2
-        #         if a==3:
-        #             shomework.grade=grade3
-        #         if a==4:
-        #             shomework.grade=grade4
-        #         if a==5:
-        #             shomework.grade=grade5
-        #         if a==6:
-        #             shomework.grade=grade6
-        #     a=a+1
+        if not shomework.grade1:
+            if shomework.grade:
+                shomework.grade2=shomework.grade2+1
+                shomework.grade=shomework.grade*(shomework.grade2-1)/shomework.grade2+int(grade6)/shomework.grade2
+            else:
+                shomework.grade=grade6
+                shomework.grade2=1
         shomework=SHomeworkModel.query.filter_by(lid=lid,sid=user_id).first()
         shomework.state='已互评'
         db.session.commit()
@@ -272,8 +268,9 @@ def judge(lid):
     if request.method=='GET':
         a=False
         lhomework=LHomeworkModel.query.get(lid)
-        if(lhomework.duedate>datetime.now()):
-            a=True
+        if lhomework.duedate:
+            if(lhomework.duedate>datetime.now()):
+                a=True
         return jsonify({'message':str(a)})
 
 @bp.route('/judge1/<int:lid>',methods=['GET','POST'])
@@ -285,3 +282,61 @@ def judge1(lid):
         if shomework.state=='待互评':
             a=True
         return jsonify({'message':str(a)})
+
+#下载文件
+@bp.route('/download/<int:lid>',methods=['GET','POST'])
+def download(lid):
+    lhomework=LHomeworkModel.query.filter_by(id=lid).first()
+    filename=lhomework.filename1
+    directory = 'C:\\E\\实训作业互评系统\\后端\\Lhomework\\'+str(lid)
+    if filename:
+        return send_from_directory(directory, filename, as_attachment=True)
+    else:
+        # flash("No file to download", "error")
+        return redirect(url_for('sc.student',course_id=lhomework.cid))
+
+@bp.route('/download1/<int:lid>',methods=['GET','POST'])
+def download1(lid):
+    lhomework=LHomeworkModel.query.filter_by(id=lid).first()
+    filename=lhomework.filename2
+    directory = 'C:\\E\\实训作业互评系统\\后端\\Answer\\'+str(lid)
+    if filename:
+        return send_from_directory(directory, filename, as_attachment=True)
+    else:
+        # flash("No file to download", "error")
+        return redirect(url_for('sc.pigai',lid=lid))
+
+@bp.route('/download2/<int:lid>/<int:sno>',methods=['GET','POST'])
+def download2(lid,sno):
+    shomework=SHomeworkModel.query.filter_by(lid=lid,sid=sno).first()
+    filename=shomework.filename
+    directory = 'C:\\E\\实训作业互评系统\\后端\\Shomework\\'+str(shomework.id)
+    if filename:
+        return send_from_directory(directory, filename, as_attachment=True)
+    else:
+        # flash("No file to download", "error")
+        return redirect(url_for('sc.pigai',lid=lid))
+
+#上传文件
+@bp.route('/upload/<int:sid>',methods=['GET','POST'])
+def upload(sid):
+    if request.method=='POST':
+        if 'file' not in request.files:
+            return 'No file part'
+        file = request.files['file']
+        if file.filename == '':
+            return 'No selected file'
+        if file:
+            user_id=session.get("user_id")
+            shomework=SHomeworkModel.query.filter_by(lid=sid,sid=user_id).first()
+            path='C:\\E\\实训作业互评系统\\后端\\Shomework\\'+str(shomework.id)
+            if shomework.filename:
+                os.remove(path+"\\"+shomework.filename)               
+            if not os.path.exists(path):
+                os.makedirs(path)
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(path, filename))
+            shomework.filename=filename
+            shomework.state='已提交'
+            db.session.commit()
+            return jsonify({'message': '处理请求成功'})

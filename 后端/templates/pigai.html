@@ -34,18 +34,29 @@
             参考答案:
             <br>
             <textarea id="daan1" readonly placeholder="readonly text">{{answer}}</textarea>
+            <br>
+            <a href='/sc/download1/{{lid}}'>标准答案下载</a>
         </div>
         <div id="tigongdaan">
             学生答案:
             <br>
             <textarea id="daan" readonly placeholder="readonly text" >{{answer1}}</textarea>
+            <br>
+            <a id="fd" href="/sc/download2/{{lid}}/{{sno1}}">学生答案下载</a>
         </div>
     </div>
     <div id="chengji">
+        第几份:
+        <input id="fenshu1" type="text" value="1">
+        <br>
         <input type="number" id="grade" min="0" max="100" required>
     </div>
     <div id="fenshu">
-        <button v-if="shuliang === max" @click="pigaiwancheng()">批改完成</button>
+        <div v-if="shuliang === max">
+            <button @click="jianliang()">上一个</button>
+            <button @click="pigaiwancheng()">批改完成</button>
+        </div>
+        
         <div v-else>
             <button @click="zengliang()">下一个</button>
             <button @click="jianliang()">上一个</button>
@@ -67,59 +78,81 @@
             methods:{
                 zengliang(){
                     this.shuliang=this.shuliang+1
+                    $("#fenshu1").val(this.shuliang+1);
                     if(this.shuliang===1){
                     $("#grade1").val($("#grade").val());
                     $("#grade").val($("#grade2").val());
                     $("#daan").val($("#data2").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno2").val();
                     }
                     if(this.shuliang===2){
                     $("#grade2").val($("#grade").val());
                     $("#grade").val($("#grade3").val());
                     $("#daan").val($("#data3").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno3").val();
                     }
                     if(this.shuliang===3){
                     $("#grade3").val($("#grade").val());
                     $("#grade").val($("#grade4").val());
                     $("#daan").val($("#data4").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno4").val();
                     }
                     if(this.shuliang===4){
                     $("#grade4").val($("#grade").val());
                     $("#grade").val($("#grade5").val());
                     $("#daan").val($("#data5").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno5").val();
                     }
                     if(this.shuliang===5){
                     $("#grade5").val($("#grade").val());
                     $("#grade").val($("#grade6").val());
                     $("#daan").val($("#data6").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno6").val();
                     }
                 },
                 jianliang(){
                     if(this.shuliang!==0){
                     this.shuliang=this.shuliang-1
+                    $("#fenshu1").val(this.shuliang+1);
                     if(this.shuliang===0){
                     $("#grade2").val($("#grade").val());
                     $("#grade").val($("#grade1").val());
                     $("#daan").val($("#data1").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno1").val();
                     }
                     if(this.shuliang===1){
                     $("#grade3").val($("#grade").val());
                     $("#grade").val($("#grade2").val());
                     $("#daan").val($("#data2").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno2").val();
                     }
                     if(this.shuliang===2){
                     $("#grade4").val($("#grade").val());
                     $("#grade").val($("#grade3").val());
                     $("#daan").val($("#data3").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno3").val();
                     }
                     if(this.shuliang===3){
                     $("#grade5").val($("#grade").val());
                     $("#grade").val($("#grade4").val());
                     $("#daan").val($("#data4").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno4").val();
                     }
                     if(this.shuliang===4){
                     $("#grade6").val($("#grade").val());
                     $("#grade").val($("#grade5").val());
                     $("#daan").val($("#data5").val());
+                    var downloadLink = document.getElementById('fd');
+                    downloadLink.href = '/sc/download1/'+$("#sno5").val();
                     }
                 }},
                 pigaiwancheng(){

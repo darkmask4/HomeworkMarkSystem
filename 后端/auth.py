@@ -36,4 +36,9 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("auth.login"))
-         
+
+
+@bp.route("/chengyuan", methods=['GET', 'POST'])
+def chengyuan():
+     if request.method == 'GET':
+         return render_template("xiaozuchengyuan.html")

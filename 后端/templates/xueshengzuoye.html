@@ -10,7 +10,7 @@
     <input type="hidden" id="data" value="{{lid}}"/>
     <input type="hidden" id="data1" value="{{sid}}"/>
     <div id="qingkuang">
-        <table>
+        <table border="2">
             <thead>
                 <tr>
                     <th>序号</th>
@@ -31,7 +31,12 @@
             </tbody>
         </table>
     </div>
-    <textarea id="zuoyeneirong" readonly >{{content}}</textarea>
+    <div id="zuoyekuang">
+        <textarea id="zuoyeneirong" readonly >{{content}}</textarea>
+        <br>
+        <a href="/tc/download3/{{lid}}/{{sid}}">作业内容</a>
+    </div>
+    
     <div id="pingfen">
         成绩: <input type="number" id="grade">
         <button @click = "tijiao()">提交</button>
@@ -76,5 +81,6 @@
         }
         )
     </script>
+    <script src="{{url_for('static',filename='yanhua.js')}}"></script>
 </body>
 </html>

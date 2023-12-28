@@ -6,7 +6,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{url_for('static',filename='fenxi.css')}}">
     <script src="{{url_for('static',filename='echarts.min.js')}}"></script>
-
 </head>
 <body>
     <input type="hidden" id="data" value="{{lid}}"/>
@@ -36,11 +35,11 @@
             </ul>
         </div>
     </div>
-     <div id="subnav">
+      <div id="subnav">
         <div id="content">
             
         </div>
-    </div>
+    </div> 
     <div id="username">
         <div v-show = "flag" class="box"><a href=""> 信息中心</a></div>
         <div v-show = "flag" class="box"><a href="/auth/logout"> 退出登录</a></div>
@@ -119,6 +118,6 @@
 
 
 
-    
+<script src="{{url_for('static',filename='yanhua.js')}}"></script>
 </body>
 </html>

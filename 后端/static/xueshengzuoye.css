@@ -2,8 +2,16 @@
     resize: none;
     height: 500px;
     width: 900px;
+    
+}
+
+#zuoyekuang{
     margin-top: 100px;
     margin-left: 250px;
+    height: 510px;
+    width: 900px;
+    display: flex;
+    flex-direction: column;
 }
 
 #pingfen{
@@ -28,5 +36,10 @@ td, th {
 #fanhui a {
     text-decoration: none;
     display: block;
+    color: #000;
+}
+
+a{
+    text-decoration: none;
     color: #000;
 }

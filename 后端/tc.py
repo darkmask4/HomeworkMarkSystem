@@ -1,9 +1,11 @@
-from flask import Blueprint,render_template,request,session,url_for,redirect,jsonify
+from flask import Blueprint,render_template,request,session,url_for,redirect,jsonify,send_from_directory
 from models import UserModel,CourseModel,UCModel,LHomeworkModel,SHomeworkModel
 from sqlalchemy import or_
 from datetime import datetime
 from exts import db
 import random
+import os
+from werkzeug.utils import secure_filename
 
 bp=Blueprint("tc",__name__,url_prefix="/tc")
 
@@ -63,7 +65,8 @@ def submit1():
             count = LHomeworkModel.query.order_by(LHomeworkModel.id.desc()).first().id+1
             return jsonify({'count':str(count)})
         else:
-            return jsonify({'count':0})
+            #修改1
+            return jsonify({'count':1})
     if request.method=='POST':
         item_count = LHomeworkModel.query.count()
         if item_count>0:
@@ -303,6 +306,7 @@ def grade():
         grade=data.get('grade')
         shomework=SHomeworkModel.query.filter_by(lid=lid,sid=sid).first()
         shomework.grade=grade
+        shomework.grade1=1
         db.session.commit()
         return jsonify({'message': 'Items callback successfully'})
     
@@ -327,3 +331,100 @@ def get_grade_data(lid):
     zipped_data=zip(values,names)
     homework_data=[{'value': value,'name':name}for value,name in zipped_data]
     return jsonify(homework_data)
+
+#上传文件
+# @bp.route('/upload1/<int:lid>',methods=['GET','POST'])
+# def upload1(lid):
+#     if request.method=='POST':
+#         if 'file' not in request.files:
+#             return 'No file part'
+#         file = request.files['file']
+#         if file.filename == '':
+#             return 'No selected file'
+#         if file:
+#             lhomework=LHomeworkModel.query.filter_by(id=lid).first()
+#             path='C:\\E\\实训作业互评系统\\后端\\Lhomework'+lid
+#             if lhomework.filename1:
+#                 os.remove(path+lhomework.filename1)               
+#             if not os.path.exists(path):
+#                 os.makedirs(path)
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(path, filename))
+#             lhomework.filename1=filename
+#             db.session.commit()
+#         return jsonify({'message': '成功处理请求'})
+
+@bp.route('/upload1/<int:lid>',methods=['GET','POST'])
+def upload1(lid):
+    if request.method=='POST':
+        if 'file' not in request.files:
+            return 'No file part'
+        file = request.files['file']
+        if file.filename == '':
+            return 'No selected file'
+        if file:
+            lhomework=LHomeworkModel.query.filter_by(id=lid).first()
+            path='C:\\E\\实训作业互评系统\\后端\\Lhomework\\'+str(lhomework.id)
+            if lhomework.filename1:
+                os.remove(path+"\\"+lhomework.filename1)               
+            if not os.path.exists(path):
+                os.makedirs(path)
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(path, filename))
+            lhomework.filename1=filename
+            db.session.commit()
+            return jsonify({'message': '处理请求成功'})
+
+# @bp.route('/upload2/<int:lid>',methods=['GET','POST'])
+# def upload2(lid):
+#     if request.method=='POST':
+#         if 'file' not in request.files:
+#             return 'No file part'
+#         file = request.files['file']
+#         if file.filename == '':
+#             return 'No selected file'
+#         if file:
+#             lhomework=LHomeworkModel.query.filter_by(id=lid).first()
+#             path='C:\\E\\实训作业互评系统\\后端\\Answer'+lid
+#             if lhomework.filename2:
+#                 os.remove(path+lhomework.filename2)               
+#             if not os.path.exists(path):
+#                 os.makedirs(path)
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(path, filename))
+#             lhomework.filename2=filename
+#             db.session.commit()
+#         return jsonify({'message': '成功处理请求'})
+
+@bp.route('/upload2/<int:lid>',methods=['GET','POST'])
+def upload2(lid):
+    if request.method=='POST':
+        if 'file' not in request.files:
+            return 'No file part'
+        file = request.files['file']
+        if file.filename == '':
+            return 'No selected file'
+        if file:
+            lhomework=LHomeworkModel.query.filter_by(id=lid).first()
+            path='C:\\E\\实训作业互评系统\\后端\\Answer\\'+str(lhomework.id)
+            if lhomework.filename2:
+                os.remove(path+"\\"+lhomework.filename2)               
+            if not os.path.exists(path):
+                os.makedirs(path)
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(path, filename))
+            lhomework.filename2=filename
+            db.session.commit()
+            return jsonify({'message': '处理请求成功'})    
+
+#下载文件
+@bp.route('/download3/<int:lid>/<int:sno>',methods=['GET','POST'])
+def download3(lid,sno):
+    shomework=SHomeworkModel.query.filter_by(lid=lid,sid=sno).first()
+    filename=shomework.filename
+    directory = 'C:\\E\\实训作业互评系统\\后端\\Shomework\\'+str(shomework.id)
+    if filename:
+        return send_from_directory(directory, filename, as_attachment=True)
+    else:
+        # flash("No file to download", "error")
+        return redirect(url_for('tc.state1',lid=lid,sid=sno,course_id=shomework.cid))

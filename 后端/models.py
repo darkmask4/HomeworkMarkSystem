@@ -29,7 +29,8 @@ class LHomeworkModel(db.Model):
     duedate1=db.Column(db.DateTime,nullable=True)
     answer=db.Column(db.String(1000),nullable=True)
     evaluation=db.Column(db.String(1000),nullable=True)
-
+    filename1=db.Column(db.String(1000),nullable=True)
+    filename2=db.Column(db.String(1000),nullable=True)
 
 class SHomeworkModel(db.Model):
     __tablename__="shomework"
@@ -41,3 +42,6 @@ class SHomeworkModel(db.Model):
     grade=db.Column(db.Integer,nullable=True)
     #待完成/已提交/已过期/待批阅/学生批阅/教师批阅
     state=db.Column(db.String(100),nullable=False)
+    filename=db.Column(db.String(1000),nullable=True)
+    grade1=db.Column(db.Integer,nullable=True)
+    grade2=db.Column(db.Integer,nullable=True)

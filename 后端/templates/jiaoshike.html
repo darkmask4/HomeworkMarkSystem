@@ -63,7 +63,7 @@
               var userchoice1 = window.confirm('您是否要删除您的作业')
               if(userchoice1){
                 this.todoList = this.todoList.filter(item => item.id !== id)
-
+              
                 axios.post('/tc/delete1', {
                   id:id
                 })
@@ -88,7 +88,8 @@
                   console.log(response.data);
                   this.count=response.data.count;
                   this.todoList.unshift({
-                    id: +new Date(),
+                    //修改2
+                    id: this.count,
                     name:this.homeworkName,
                     lianjie:path_data+'/'+this.count
                 })

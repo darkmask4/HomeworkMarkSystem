@@ -47,12 +47,22 @@
         </div>
     </div>
     <div id="fabu">
-        <div v-if="yijing === 1 "><button @click = "fasong()">发布</button></div>
+        <div v-if="yijing === 1 ">
+            <form id="myform" onsubmit="submitFileForm(event)" method="POST" action="/" enctype="multipart/form-data">
+                <input id="xuanzewenjian" type="file" name="file">
+                <input type="submit" value="Upload">
+            </form>
+            <button @click = "fasong()">发布</button>
+        </div>
         <div v-else-if="yijing === 2">
             <button @click = "shouhui()">召回</button>
             <button @click = "huping()">互评</button>
         </div>
         <div v-else-if="yijing === 3">
+            <form id="myform" onsubmit="submitFileForm1(event)" method="POST" action="/" enctype="multipart/form-data">
+                <input id="xuanzewenjian1" type="file" name="file">
+                <input type="submit" value="Upload">
+            </form>
             <button @click = "fadaan()">发布标准答案</button>
             <button @click = "hupingquxiao()">互评取消</button>
         </div>
@@ -220,6 +230,41 @@
         }); // 设置时刻格式
         });
     </script>
-
+    <script> function submitFileForm(event) { 
+        event.preventDefault(); // 阻止默认的表单提交行为 
+        // 获取文件输入框的值 
+        var fileInput = document.getElementById("xuanzewenjian");
+        var selectedFile = fileInput.files[0];
+                // 创建 FormData 对象，用于构建表单数据 
+        var formData = new FormData();
+        formData.append("file", selectedFile); 
+                // 创建 XMLHttpRequest 对象 
+        var xhr = new XMLHttpRequest(); 
+                // 设置请求方法和请求地址 
+        xhr.open("POST", "/tc/upload1/"+$("#data").val(), true); 
+                // 定义上传完成后的回调函数 
+        xhr.onload = function () { if (xhr.status === 200) { console.log("文件上传成功！"); } 
+        else { console.error("文件上传失败：" + xhr.statusText); } }; // 发送请求 
+        xhr.send(formData);
+        }
+        function submitFileForm1(event) { 
+        event.preventDefault(); // 阻止默认的表单提交行为 
+        // 获取文件输入框的值 
+        var fileInput = document.getElementById("xuanzewenjian1");
+        var selectedFile = fileInput.files[0];
+                // 创建 FormData 对象，用于构建表单数据 
+        var formData = new FormData();
+        formData.append("file", selectedFile); 
+                // 创建 XMLHttpRequest 对象 
+        var xhr = new XMLHttpRequest(); 
+                // 设置请求方法和请求地址 
+        xhr.open("POST", "/tc/upload2/"+$("#data").val(), true); 
+                // 定义上传完成后的回调函数 
+        xhr.onload = function () { if (xhr.status === 200) { console.log("文件上传成功！"); } 
+        else { console.error("文件上传失败：" + xhr.statusText); } }; // 发送请求 
+        xhr.send(formData);
+        }
+    </script>
+    <script src="{{url_for('static',filename='yanhua.js')}}"></script>
 </body>
 </html>

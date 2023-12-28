@@ -10,23 +10,46 @@
     <input type="hidden" id="data" value=""/>
     <input type="hidden" id="data1" value=""/>
     <div id="ding" >作业互评系统</div>
-    <div id="homeworks">
-        <ul>
-            {% for item in items %}
-            <li>
-              <a href="#" onclick="changeTextBox('{{item.value}}')">{{ item.name }}</a>
-            </li>
-            {% endfor %}
-        </ul>
+
+    <div id="subnav">
+        <div id="homeworks">
+                    <ul>
+                        {% for item in items %}
+                        <li>
+                        <a href="#" onclick="changeTextBox('{{item.value}}')">{{ item.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
     </div>
+        
+    
     <div id="writeHomework">
         <textarea id="wenbenkuang1" type="text" placeholder="zuoye1" readonly placeholder="Read-only text"></textarea>
+        <br>
+        <a id="fd" href="">文件下载</a>
+        <br>
         <textarea id="wenbenkuang" type="text" placeholder="Enter your text here"></textarea>
     </div>
+    <div id="wenjianshangchuan">
+        <form id="myform" onsubmit="submitFileForm(event)" method="POST" action="/" enctype="multipart/form-data">
+            <input id="xuanzewenjian" type="file" name="file">
+            <input type="submit" value="Upload">
+        </form>
+    </div>
     <div id="tijiao">
-        <div v-if="yijing ===1 "><button @click = "tijiao1()">提交作业</button></div>
-        <div v-else><button @click = "tijiao1()">修改作业</button> <button @click = "pigai()">批改作业</button></div>
-
+        <div class="yi">
+            成绩:<input id="grade" type="text" placeholder="grade" readonly placeholder="Read-only text">
+        </div>
+        <div class="er">
+            <div v-if="yijing ===1 "><button @click = "tijiao1()">提交作业</button></div>
+            <div v-else><button @click = "tijiao1()">修改作业</button> <button @click = "pigai()">批改作业</button></div>
+        </div>
+        <div class="san">
+            截止日期:<input id="shijian" type="text" placeholder="date" readonly placeholder="Read-only text">
+        </div>
+        
+``
     </div>
     <div id="username">
         <div v-show = "flag" class="box"><a href=""> 信息中心</a></div>
@@ -68,7 +91,7 @@
                   console.log(response.data);
                   if(response.data.message==='False')
                   {
-                    alert('作业已截至')
+                    alert('作业不符合提交标准')
                     return
                   }
                   axios.post('/sc/post', {
@@ -114,17 +137,72 @@
                 type: "GET",
                 success: function(response) {
                     // 成功接收到响应后，更新文本框的内容
+                    document.getElementById("myform").action="/sc/upload/"+newValue
+                    $("#shijian").val(response.duedate);
+                    $("#grade").val(response.grade);
                     $("#wenbenkuang1").val(response.new_value);
                     $("#wenbenkuang").val(response.newvalue);
                     $("#data").val(response.yijing);
                     tijiao.yijing = parseInt($("#data").val(), 10);
                     $("#data1").val(newValue);
+                    // 获取<a>元素
+                    var downloadLink = document.getElementById('fd');
+                    // 设置<a>元素的href属性
+                    downloadLink.href = '/sc/download/'+newValue;
                 },
                 error: function(error) {
                     console.log("Error:", error);
                 }
             });
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+      var scrollBox = document.getElementById("subnav");
+
+      var scrollAmount = 20;
+
+      scrollBox.addEventListener("wheel", function(event) {
+        event.preventDefault();
+        var delta = event.deltaY || event.detail || event.wheelDelta;
+        var direction = (delta > 0) ? 1 : -1;
+        var currentScroll = scrollBox.scrollTop;
+        scrollBox.scrollTop = currentScroll + direction * scrollAmount;
+      });
+    });
+    </script>
+    <script> function submitFileForm(event) { 
+        event.preventDefault(); // 阻止默认的表单提交行为 
+        // 获取文件输入框的值 
+        $.ajax({
+                url: "/sc/judge/" + $("#data1").val(),  // 包含参数的 URL
+                type: "GET",
+                success: function(response) {
+                    // 成功接收到响应后，更新文本框的内容
+                if(response.message==='False')
+                {
+                    alert('作业不符合提交标准')
+                    return
+                }
+                var fileInput = document.getElementById("xuanzewenjian");
+                var selectedFile = fileInput.files[0];
+                // 创建 FormData 对象，用于构建表单数据 
+                var formData = new FormData();
+                formData.append("file", selectedFile); 
+                // 创建 XMLHttpRequest 对象 
+                var xhr = new XMLHttpRequest(); 
+                // 设置请求方法和请求地址 
+                xhr.open("POST", "/sc/upload/"+$("#data1").val(), true); 
+                // 定义上传完成后的回调函数 
+                xhr.onload = function () { if (xhr.status === 200) { console.log("文件上传成功！"); } 
+                else { console.error("文件上传失败：" + xhr.statusText); } }; // 发送请求 
+                xhr.send(formData);
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                }
+        });
+     } 
     </script>
 
 </body>
